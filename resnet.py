@@ -69,7 +69,7 @@ def build_model(input_shape, blocks, block_sets, kernel_size=(3,3), first_filter
     x = Dense(100, activation='relu')(x)
     outputs = Dense(10, activation='softmax')(x)
 
-    model = Model(input=inputs, output=outputs)
+    model = Model(inputs, outputs)
 
     return model
 
@@ -89,7 +89,7 @@ train_samples = x_train.shape[0]
 test_samples = x_test.shape[0]
 
 # ハイパーパラメータ
-epochs = 200
+epochs = 100
 batch_size = 50
 
 optimizer=Adam()
@@ -98,4 +98,8 @@ optimizer=Adam()
 model = build_model(input_shape, blocks=3, block_sets=2)
 model.compile(optimizer=optimizer, loss=categorical_crossentropy, metrics=['accuracy'])
 model.summary()
+history = model.fit(x_train, y_train, batch_size, epochs, validation_data=(x_test, y_test))
 
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.show()
